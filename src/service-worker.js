@@ -5,7 +5,7 @@ self.addEventListener("install", event => {
                 "index.html",
                 "manifest.json",
                 "icone-192.png",
-                "icon-512.png",
+                "icone-512.png",
                 "imagemManha.jpeg",
                 "imagemTarde.jpeg",
                 "imagemNoite.jpeg",
@@ -19,4 +19,5 @@ self.addEventListener("fetch", event => {
     event.respondWith(
         caches.match(event.request).then(response => response || fetch(event.request))
     );
+
 });
