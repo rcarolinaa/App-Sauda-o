@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Horário</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="000000">
+</head>
+<body>
+    <div id="caixa">
+        <h1 id="titulo">Bem-vindo(a)!</h1>
+        <p id="hora"></p>
+        <p id="data"></p>
+        <p id="dia"></p>
+        <p id="frases"></p>
+    </div>
+   
+   <script>
+    let frases = [];
+    let indice = 0;
+
+
+    function trocar() {
+        const agora = new Date();
+        const hora = agora.getHours();
+        const minutos = agora.getMinutes().toString().padStart(2, "0");
+        const segundos = agora.getSeconds().toString().padStart(2, "0");
+        const dia = agora.getDay();
+        const opcoes = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        const dataFormatada = agora.toLocaleDateString("pt-BR", opcoes);
+
+        
+        let mensagem;
+        let fundo;
+        let tipoDia = (dia === 0 || dia === 6)? "🎉 Hoje é dia de descansar, aproveite seu dia!" : "💼 Hoje é um dia útil, bora trabalhar!";
+
+        if(hora >= 6 && hora < 12){
+            fundo = "imagemManha.jpeg";
+            mensagem = "Bom dia! 🌞";
+            frases = [
+                "A adversidade revela o gênio, a prosperidade o esconde.",
+                "Não importa quão devagar você vá, desde que não pare.",
+                "O segredo de mudar é concentrar toda a sua energia não <br> em lutar contra o velho, mas em construir o novo."
+            ];
+        }
+        else if (hora >= 12 && hora < 18){
+            fundo = "imagemTarde.jpeg";
+            mensagem = "Boa tarde! ⛅";
+            frases = [
+                "A mente é tudo. O que você pensa, você se torna.",
+                "O bambu que se dobra é mais forte que o carvalho que resiste.",
+                "No meio da dificuldade reside a oportunidade."
+            ]
+        }
+        else if(hora >= 18 && hora < 23){
+            fundo = "imagemNoite.jpeg";
+            mensagem = "Boa noite! 🌝";
+            frases = [
+                "O sábio não acumula para si; quanto mais ajuda aos outros, mais possui",
+                "Para entender tudo, é preciso perdoar tudo.",
+                "Durma com gratidão e acorde com esperança."
+            ]
+        }
+        else{
+            fundo = "imagemDescansar.jpeg";
+            mensagem = "Hora de descansar! 😴";
+            frases = [
+                "Cada noite é um convite para recomeçar com mais sabedoria.",
+                "No descanso, a mente encontra seu caminho para a sabedoria.",
+                "Que os sonhos sejam leves e o coração tranquilo."
+            ]
+        }
+
+        document.body.style.backgroundImage = `url('${fundo}')`;
+        document.getElementById("titulo").innerHTML = mensagem;
+        document.getElementById("hora").innerHTML = `Agora são ${hora}:${minutos}:${segundos}`;
+        document.getElementById("data").innerHTML = "📅" + dataFormatada;
+        document.getElementById("dia").innerHTML = tipoDia 
+
+    }
+
+    function trocarFrases() {
+        if (frases.length > 0) {
+            document.getElementById("frases").innerHTML = frases[indice];
+            indice = (indice + 1) % frases.length;
+        }
+    }
+    trocar();
+    setInterval (trocar, 1000);
+    setInterval (trocarFrases, 5000);
+    
+   </script>
+   <script>
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker.register("service-worker.js")
+                .then(() => console.log("Service Worker resgistrado"))
+                .catch(err => console.log(" Erro no SW:", err));
+        }
+   </script>
+   <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: black;
+            font-family: Arial, sans-serif;
+            background-size: cover;       
+            background-repeat: no-repeat;  
+            background-position: center center;
+            background-attachment: fixed;      
+            transition: background-image 0.5s ease-in-out;
+        }
+
+        #caixa {
+            text-align: center;     
+            background: white;
+            padding: 20px;
+            max-width: 400px;
+            width: 100%;
+            border-radius: 25px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            opacity: 0.7;
+        }
+
+        @media(max-width: 480px){
+            body{font-size: 35px; padding-top: 50px;}
+            button{font-size: 14px; padding: 8px 16px;}
+            #caixa {width:70%;}
+            p {font-size: 14px;}
+            h1 {font-size: 22px;}
+        }
+        
+    </style>
+</body>
+</html>
